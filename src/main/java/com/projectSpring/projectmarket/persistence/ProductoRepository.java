@@ -6,6 +6,7 @@ import com.projectSpring.projectmarket.persistence.crud.ProductoCrudRepository;
 import com.projectSpring.projectmarket.persistence.entity.Producto;
 import com.projectSpring.projectmarket.persistence.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,8 +39,10 @@ public class ProductoRepository implements ProductRepository {
     }
 
     @Override
-    public Optional<Product> getProduct(int productId) {
-        return productoCrudRepository.findById(productId).map(producto -> mapper.toProduct(producto));
+    @Cacheable(value="products", key="#productId")
+    public Product getProduct(int productId) {
+        var res =productoCrudRepository.findById(productId).map(producto -> mapper.toProduct(producto));
+        return res.get();
     }
 
     @Override

@@ -17,7 +17,7 @@ public class ProductService {
         return productRepository.getAll();
     }
 
-    public Optional<Product> getProduct(int productId){
+    public Product getProduct(int productId){
         return productRepository.getProduct(productId);
     }
 
@@ -30,9 +30,11 @@ public class ProductService {
     }
 
     public boolean delete(int productId){
-        return getProduct(productId).map(product -> {
-            productRepository.delete(productId);
+        var res = getProduct(productId);
+        if(res != null){
             return true;
-        }).orElse(false);
+        } else {
+            return false;
+        }
     }
 }
