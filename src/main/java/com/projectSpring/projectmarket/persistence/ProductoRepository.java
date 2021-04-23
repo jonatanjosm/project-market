@@ -39,10 +39,8 @@ public class ProductoRepository implements ProductRepository {
     }
 
     @Override
-    @Cacheable(value="products", key="#productId")
-    public Product getProduct(int productId) {
-        var res =productoCrudRepository.findById(productId).map(producto -> mapper.toProduct(producto));
-        return res.get();
+    public Optional<Product> getProduct(int productId) {
+        return productoCrudRepository.findById(productId).map(producto -> mapper.toProduct(producto));
     }
 
     @Override
